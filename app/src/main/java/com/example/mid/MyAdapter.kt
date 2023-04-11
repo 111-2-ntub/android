@@ -7,13 +7,15 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mid.data.Phone
 import java.util.*
 
-class MyAdapter(dataSet: ArrayList<dataBean>,) :
+class MyAdapter() :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    var dataSet = dataSet
+
     private var delListener: MyAdapter.DelListener? = null
+    private var phoneList=emptyList<Phone>()
 
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -31,15 +33,14 @@ class MyAdapter(dataSet: ArrayList<dataBean>,) :
         }
     }
 
-    fun update(datasets: ArrayList<dataBean>) {
-        dataSet = datasets
+    fun update(datasets: List<Phone>) {
+        phoneList = datasets
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.adapter_row, parent, false)
-
-
         return ViewHolder(view)
     }
 
@@ -49,8 +50,8 @@ class MyAdapter(dataSet: ArrayList<dataBean>,) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.txtName.text = dataSet[position].name
-        holder.txtPhone.text = dataSet[position].phone
+        holder.txtName.text = phoneList[position].name
+        holder.txtPhone.text = phoneList[position].phone
         holder.btnDel.setOnClickListener {
             delListener?.onDel(position)
         }
@@ -58,7 +59,7 @@ class MyAdapter(dataSet: ArrayList<dataBean>,) :
 
     }
 
-    override fun getItemCount() = dataSet.size
+    override fun getItemCount() = phoneList.size
 
     interface DelListener {
         fun onDel(p:Int)
