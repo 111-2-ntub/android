@@ -2,7 +2,7 @@ package com.example.mid.data
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-//import androidx.lifecycle.viewmodel
+
 import androidx.lifecycle.LiveData
 
 
