@@ -35,23 +35,38 @@ private lateinit var mPhoneViewModel:PhoneViewModel
             adapter.update(phone)
         })
 
+
         val btnCreate = findViewById<Button>(R.id.btnCreate)
         btnCreate.setOnClickListener({
             showCreateDialog("新增")
         })
 
-//        myAdapter.setDel(object : MyAdapter.DelListener {
-//            override fun onDel(p: Int) {
-//                phoneDao!!.delete(datalist[p])
-//                onLoad(recyclerView)
-//            }
-//        })
+
+        adapter.setDel(object : MyAdapter.DelListener {
+            override fun onDel(p: Int) {
+                Log.d("TAG", "onDel: before")
+                mPhoneViewModel.delPhone(adapter.getItem(p))
+                Log.d("TAG", "onDel: ater")
+                Log.d("TAG", "onDel: ${mPhoneViewModel.getAll.value?.size}")
+
+            }
+        })
+        adapter.setEdit(object : MyAdapter.EditListener {
+            override fun onEdit(p: Int) {
+                showEditDialog("編輯",adapter.getItem(p))
+            }
+
+        })
+
+
 
 
 
 
 
     }
+
+
 
     private fun showCreateDialog(message: String) {
         val createDialog = CreateDialog(this)
@@ -64,6 +79,7 @@ private lateinit var mPhoneViewModel:PhoneViewModel
             })
             .setConfirm(object : CreateDialog.IOnConfirmListener {
                 override fun onConfirm(dialog: CreateDialog?) {
+                    Log.d("TAG", "onConfirm: enter ")
 
                     if (dialog?.txtName?.text != null && dialog.txtPhone?.text != null) {
                         val name = dialog.txtName!!.text.toString()
@@ -78,15 +94,19 @@ private lateinit var mPhoneViewModel:PhoneViewModel
                             }
                             Log.d("TAG", "onConfirm: after add")
                         }
+                    }else{
+                        Log.d("TAG", "onConfirm: else${dialog?.txtName?.text}")
+
                     }
                     createDialog.dismiss()
                 }
             }).show()
     }
-    fun showDeleteDialog(message: String) {
+    fun showEditDialog(message: String,toEditPhone:Phone) {
         val createDialog = CreateDialog(this)
         createDialog
             .setMessage(message)
+            .setEditMessage(toEditPhone)
             .setCancel(object : CreateDialog.IOnCancelListener {
                 override fun onCancel(dialog: CreateDialog?) {
                     createDialog.dismiss()
@@ -101,12 +121,12 @@ private lateinit var mPhoneViewModel:PhoneViewModel
                         if (TextUtils.isEmpty(name)&&TextUtils.isEmpty(phone)){
                             Log.d("TAG", "onConfirm: is empty")
                         }else{
-                            Log.d("TAG", "onConfirm: before add")
+                            Log.d("TAG", "onConfirm: before edit")
                             var Inref = this
                             Inref.run {
-                                mPhoneViewModel.addPhone(Phone(0,name,phone))
+                                mPhoneViewModel.update(Phone(toEditPhone.id,name,phone))
                             }
-                            Log.d("TAG", "onConfirm: after add")
+                            Log.d("TAG", "onConfirm: after edit")
                         }
                     }
                     createDialog.dismiss()

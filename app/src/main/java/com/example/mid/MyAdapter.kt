@@ -1,5 +1,6 @@
 package com.example.mid
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ class MyAdapter() :
 
 
     private var delListener: MyAdapter.DelListener? = null
+    private var editListener: MyAdapter.EditListener? = null
+
     private var phoneList=emptyList<Phone>()
 
 
@@ -43,16 +46,30 @@ class MyAdapter() :
         return ViewHolder(view)
     }
 
-    fun setDel(Listener: MyAdapter.DelListener) {
-        this.delListener = Listener
+    fun setDel(dListener: MyAdapter.DelListener) {
+        this.delListener = dListener
+        notifyDataSetChanged()
 
+    }
+
+    fun setEdit(eListener: EditListener){
+        this.editListener=eListener
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.txtName.text = phoneList[position].name
         holder.txtPhone.text = phoneList[position].phone
         holder.btnDel.setOnClickListener {
+            Log.d("TAG", "onBindViewHolder: before")
             delListener?.onDel(position)
+            Log.d("TAG", "onBindViewHolder: after")
+        }
+        holder.btnEdit.setOnClickListener {
+            Log.d("TAG", "onBindViewHolder: before on edit")
+
+            editListener?.onEdit(position)
+            Log.d("TAG", "onBindViewHolder: after on edit")
         }
 
 
@@ -60,7 +77,16 @@ class MyAdapter() :
 
     override fun getItemCount() = phoneList.size
 
+    fun getItem(position: Int): Phone {
+        return phoneList.get(position)
+    }
+
+
     interface DelListener {
         fun onDel(p:Int)
+    }
+
+    interface EditListener {
+        fun onEdit(p:Int)
     }
 }

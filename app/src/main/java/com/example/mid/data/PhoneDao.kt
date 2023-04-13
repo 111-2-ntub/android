@@ -12,6 +12,12 @@ interface PhoneDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addPhone(vararg users: Phone)
 
+    @Update
+    fun update(phone:Phone)
+
+    @Query("DELETE FROM phone WHERE id = :id")
+    fun deleteById(id: Int):Int
+
     @Delete
     fun delete(user: Phone)
 }
