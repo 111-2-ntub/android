@@ -7,13 +7,14 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mid.data.Phone
 import com.example.mid.data.PhoneViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : FragmentActivity() {
 
 
 private lateinit var mPhoneViewModel:PhoneViewModel
@@ -22,41 +23,41 @@ private lateinit var mPhoneViewModel:PhoneViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        val adapter=MyAdapter()
-        val linearLayoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.adapter=adapter
-
-        mPhoneViewModel=ViewModelProvider(this).get(PhoneViewModel::class.java)
-        mPhoneViewModel.getAll.observe(this, androidx.lifecycle.Observer {phone->
-            Log.d("TAG", "onCreate: ${phone.size.toString()}")
-            adapter.update(phone)
-        })
-
-
-        val btnCreate = findViewById<Button>(R.id.btnCreate)
-        btnCreate.setOnClickListener({
-            showCreateDialog("新增")
-        })
+        setContentView(R.layout.fragment)
+//        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+//        val adapter=MyAdapter()
+//        val linearLayoutManager = LinearLayoutManager(this)
+//        recyclerView.layoutManager = linearLayoutManager
+//        recyclerView.adapter=adapter
+//
+//        mPhoneViewModel=ViewModelProvider(this).get(PhoneViewModel::class.java)
+//        mPhoneViewModel.getAll.observe(this, androidx.lifecycle.Observer {phone->
+//            Log.d("TAG", "onCreate: ${phone.size.toString()}")
+//            adapter.update(phone)
+//        })
 
 
-        adapter.setDel(object : MyAdapter.DelListener {
-            override fun onDel(p: Int) {
-                Log.d("TAG", "onDel: before")
-                mPhoneViewModel.delPhone(adapter.getItem(p))
-                Log.d("TAG", "onDel: ater")
-                Log.d("TAG", "onDel: ${mPhoneViewModel.getAll.value?.size}")
+//        val btnCreate = findViewById<Button>(R.id.btnCreate)
+//        btnCreate.setOnClickListener({
+//            showCreateDialog("新增")
+//        })
 
-            }
-        })
-        adapter.setEdit(object : MyAdapter.EditListener {
-            override fun onEdit(p: Int) {
-                showEditDialog("編輯",adapter.getItem(p))
-            }
 
-        })
+//        adapter.setDel(object : MyAdapter.DelListener {
+//            override fun onDel(p: Int) {
+//                Log.d("TAG", "onDel: before")
+//                mPhoneViewModel.delPhone(adapter.getItem(p))
+//                Log.d("TAG", "onDel: ater")
+//                Log.d("TAG", "onDel: ${mPhoneViewModel.getAll.value?.size}")
+//
+//            }
+//        })
+//        adapter.setEdit(object : MyAdapter.EditListener {
+//            override fun onEdit(p: Int) {
+//                showEditDialog("編輯",adapter.getItem(p))
+//            }
+//
+//        })
 
 
 
